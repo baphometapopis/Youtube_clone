@@ -14,17 +14,16 @@ import useFetchChannel from '../Customhooks/useFetchChannel';
 const windowWidth = Dimensions.get('window').width;
 
 export default ListVideos = ({item, navigation}) => {
-  const {channelImg} = useFetchChannel(item.snippet.channelId);
+
   return (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('Details', {item});
       }}>
       <View style={styles.item}>
-        {console.log(channelImg.url)}
         <Image
           source={{
-            uri: `${item?.snippet.thumbnails?.high?.url}`,
+            uri: `${item?.snippet?.thumbnails?.high?.url}`,
           }}
           style={styles.image}
         />
@@ -32,21 +31,21 @@ export default ListVideos = ({item, navigation}) => {
           <TouchableOpacity style={styles.channellogo}>
             <Image
               source={{
-                uri: `${channelImg?.url||'https://yt3.ggpht.com/_P1JQ8TJ3YKBgX_1iL6QTBwY0AER5CfJo4lza9ETeKCFdierATpEvAPYv4mKVpAxSy-Xc8GvhkY=s800-c-k-c0x00ffffff-no-rj'}`,
+                uri: `${item?.url}`,
               }}
               style={styles.logo}
             />
           </TouchableOpacity>
           <View style={styles.desc}>
             <Text numberOfLines={2} style={styles.title}>
-              {item.snippet.title}
+              {item?.snippet?.title}
             </Text>
             <View style={styles.titleAlign}>
               <Text style={styles.titleDesc}>
                 {item?.snippet?.channelTitle}
               </Text>
               <Text style={styles.titleDesc}>
-                {aveta(item.statistics.viewCount, {digits: 2, lowercase: true})}
+                {aveta(item?.statistics?.viewCount, {digits: 2, lowercase: true})}
                 Views
               </Text>
               <Text style={styles.titleDesc}>

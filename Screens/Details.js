@@ -12,17 +12,18 @@ import {Color} from '../Constant';
 import aveta from 'aveta';
 import {converter} from '../function/dateConverter';
 import {useNavigation} from '@react-navigation/native';
-import useFetch from '../Customhooks/useFetch';
+import useFetch, { FetchVideo } from '../Customhooks/useFetch';
 const windowWidth = Dimensions.get('window').width;
 import WebView from 'react-native-webview';
 import Modal from 'react-native-modal';
+import { ScrollView } from 'react-native';
 export const Details = prop => {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
   const navigate = useNavigation();
-  const {data} = useFetch();
+  const {data} = FetchVideo();
   const {title, tags, localized, publishedAt, channelTitle} =
     prop.route.params.item.snippet;
   const {statistics, id} = prop.route.params.item;
@@ -43,12 +44,13 @@ export const Details = prop => {
           source={{uri: `https://www.youtube.com/embed/${id}`}}
         />
       </View>
-      <Animated.View
+      {/* <Animated.View
         style={[
           styles.descContainer,
           {transform: [{translateY: translateY}], elevation: 2, zIndex: -1},
-        ]}>
-        <View>
+        ]}> */}
+        <ScrollView>
+        <View style={styles.descContainer}>
           <Text style={styles.ctitle}>{title}</Text>
           <View style={{flexDirection: 'row'}}>
             <View>
@@ -69,8 +71,8 @@ export const Details = prop => {
         <View style={styles.commentContainer}>
           <Text>this is comment page</Text>
         </View>
-      </Animated.View>
-
+      {/* </Animated.View> */}
+      </ScrollView>
       <View style={styles.contentContainer}>
         <FlatList
           data={data}
@@ -109,7 +111,7 @@ export const Details = prop => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: 'red',
     flex: 1,
   },
   text: {
@@ -118,21 +120,23 @@ const styles = StyleSheet.create({
   screenContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 0.3,
-    backgroundColor: 'red',
+    // flex: 0.3,
+    // backgroundColor: 'red',
+    height:250,
+    width:windowWidth
   },
   descContainer: {
-    flex: 0.25,
+    //  flex: ,
     padding: 10,
-    // backgroundColor: 'green',
+     backgroundColor: 'green',
   },
   commentContainer: {
-    // flex: 0.1,
-    // backgroundColor: 'blue',
+     flex: 0.1,
+     backgroundColor: 'blue',
   },
   contentContainer: {
-    flex: 0.35,
-    // backgroundColor: 'yellow',
+     flex: 0.6,
+    //  backgroundColor: 'yellow',
   },
   backgroundVideo: {
     position: 'absolute',

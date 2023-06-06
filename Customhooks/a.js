@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Apilinks } from '../Constant';
 
 const FetchVideo = () => {
@@ -7,6 +7,7 @@ const FetchVideo = () => {
   const [error, setError] = useState('');
 
   const fetchVideo = async () => {
+    console.log(Apilinks.VIDEO_HTTP)
     try {
       const res = await fetch(
         Apilinks.VIDEO_HTTP +
@@ -18,12 +19,13 @@ const FetchVideo = () => {
             regionCode: 'IN',
           })
       ).then(res => res.json());
+
       // setData(res.items);
       const DataVideoWithID=[]
 
       for(const data of res.items){
-
         const channel = await fetchChannel(data.snippet.channelId);
+        // console.log(data)
         DataVideoWithID.push({...data,...channel})
       }
 
@@ -104,7 +106,7 @@ const fetchChannel = async (id) => {
   } catch (err) {
     console.log(err);
   }
-  // return null;
+  return null;
 };
 
 const FetchComments = async (videoid) => {
@@ -128,4 +130,3 @@ const FetchComments = async (videoid) => {
 };
 
 export { FetchVideo, FetchCategories, fetchChannel, FetchComments };
-

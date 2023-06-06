@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {Color} from '../Constant';
-import useFetch from '../Customhooks/useFetch';
+import useFetch, { FetchVideo } from '../Customhooks/useFetch';
 import {useNavigation} from '@react-navigation/native';
 import ListVideos from './ListVideos';
 import { Header } from '../Components/Header';
@@ -16,7 +16,7 @@ const windowWidth = Dimensions.get('window').width;
 
 export const Home = () => {
   const navigate = useNavigation();
-  const {data} = useFetch();
+  const {data} = FetchVideo();
   return (
     <SafeAreaView style={styles.container}>
     <Header/>

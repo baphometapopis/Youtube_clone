@@ -1,40 +1,40 @@
-import React, {useState,useEffect} from 'react';
-import {Apilinks} from '../Constant';
+// import React, {useState,useEffect} from 'react';
+// import {Apilinks} from '../Constant';
 
-const FetchCategories =  () => {
-    const [data, setdata] = useState([]);
+// const FetchCategories =  () => {
+//     const [data, setdata] = useState([]);
 
-const Fetch= async ()=>{
+// const Fetch= async ()=>{
     
-   await fetch(
-    Apilinks.CATEGORIES_HTTP +
-      new URLSearchParams({
-        key: Apilinks.API_KEY,
-        part: 'snippet',
-        regionCode:'IN',
-      }),
-  )
-    .then(res => res.json())
-    .then(data => {
-        setdata(data.items);
+//    await fetch(
+//     Apilinks.CATEGORIES_HTTP +
+//       new URLSearchParams({
+//         key: Apilinks.API_KEY,
+//         part: 'snippet',
+//         regionCode:'IN',
+//       }),
+//   )
+//     .then(res => res.json())
+//     .then(data => {
+//         setdata(data.items);
 
-      data.items.forEach(item => {
-        // getChannelIcon(item);
-        // console.log(item);
+//       data.items.forEach(item => {
+//         // getChannelIcon(item);
+//         // console.log(item);
 
-        // fetchComments(item.id);
-      });
-    })
-    .catch(err => console.log(err));
-}
+//         // fetchComments(item.id);
+//       });
+//     })
+//     .catch(err => console.log(err));
+// }
 
-    useEffect(() => {
-        Fetch();
-      }, []);
+//     useEffect(() => {
+//         Fetch();
+//       }, []);
     
-      return {data};
+//       return {data};
 
-};
+// };
 
 
-export default FetchCategories;
+// export default FetchCategories;
