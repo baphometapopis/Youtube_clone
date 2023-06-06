@@ -6,8 +6,8 @@ const useFetch = () => {
   const [loading, setloading] = useState(true);
   const [error, seterror] = useState('');
 
-  const fetchVideo = () => {
-    fetch(
+  const fetchVideo = async () => {
+    await fetch(
       Apilinks.VIDEO_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
