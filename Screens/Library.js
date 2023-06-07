@@ -67,7 +67,7 @@ export const Library = () => {
         <View style={styles.Container}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity style={styles.historyIcon}>
-              <Icons name="playlist-play" size={32} color="white" />
+              <Icons name="youtube" size={32} color="white" />
             </TouchableOpacity>
             <View>
               <Text style={{color: 'white', fontSize: 18, padding: 5}}>

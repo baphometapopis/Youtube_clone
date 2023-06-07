@@ -5,7 +5,9 @@ import profile from '../assets/profile.png'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import Search from 'react-native-vector-icons/AntDesign'
-export const Header = () => {
+import { useNavigation } from '@react-navigation/native'
+export const Header = (prop) => {
+  const navigate=useNavigation();
   return (
     <View style={{flexDirection: 'row'}}>
     <View style={{justifyContent: 'center',marginLeft:10,flex:0.3,padding:5}}>
@@ -25,11 +27,13 @@ export const Header = () => {
         size={23}
         style={{paddingHorizontal:10}}
         />  
+        <TouchableOpacity onPress={()=>navigate.navigate('Search')}>
          <Search name='search1'
         color='white'
         size={23}
         style={{paddingHorizontal:10}}
         /> 
+        </TouchableOpacity >
         <TouchableOpacity style={{paddingHorizontal:5}} >
         <Image
         source={profile}

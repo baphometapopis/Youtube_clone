@@ -3,6 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from '../Screens/Home';
 import {Details} from '../Screens/Details';
 import {TabNavigation} from './TabNavigation';
+import SuggestQueriesComponent from '../Screens/SearchSuggestion';
+import { SearchCategories } from '../Screens/SearchCategories';
 
 export const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -13,6 +15,9 @@ export const StackNavigation = () => {
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home_Tab" component={TabNavigation} />
       <Stack.Screen name="Details" component={Details} />
+      <Stack.Screen name='Search' component={SuggestQueriesComponent}/>
+      <Stack.Screen name='SearchCategories' component={SearchCategories}/>
+
     </Stack.Navigator>
   );
 };

@@ -1,5 +1,6 @@
-import  { useEffect, useState } from 'react';
-import { Apilinks } from '../Constant';
+import {useEffect, useState} from 'react';
+import {Apilinks} from '../Constant';
+import SuggestQueriesComponent from '../Screens/SearchSuggestion';
 
 const FetchVideo = () => {
   const [data, setData] = useState([]);
@@ -16,19 +17,18 @@ const FetchVideo = () => {
             chart: 'mostPopular',
             maxResults: 5,
             regionCode: 'IN',
-          })
+          }),
       ).then(res => res.json());
       // setData(res.items);
-      const DataVideoWithID=[]
+      const DataVideoWithID = [];
 
-      for(const data of res.items){
-
+      for (const data of res.items) {
         const channel = await fetchChannel(data.snippet.channelId);
-        DataVideoWithID.push({...data,...channel})
+        DataVideoWithID.push({...data, ...channel});
       }
 
       // res.items.forEach(async element => {
-        
+
       //     const channel = await fetchChannel(element.snippet.channelId);
       //     // console.log(channel,element);
       //     DataVideoWithID.push({...element,...channel})
@@ -36,11 +36,9 @@ const FetchVideo = () => {
       //     //   data:res.items,
       //     //   channelId:channel
       //     // })
-          
-       
+
       // });
-      setData(DataVideoWithID)
-      
+      setData(DataVideoWithID);
     } catch (err) {
       console.log(err);
     }
@@ -48,9 +46,10 @@ const FetchVideo = () => {
 
   useEffect(() => {
     fetchVideo();
+    // SuggestQueriesComponent();
   }, []);
 
-  return { data };
+  return {data};
 };
 
 const FetchCategories = () => {
@@ -65,28 +64,27 @@ const FetchCategories = () => {
           regionCode: 'IN',
         }),
     )
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         setdata(data.items);
 
-        data.items.forEach((item) => {
+        data.items.forEach(item => {
           // getChannelIcon(item);
           // console.log(item);
-
           // fetchComments(item.id);
         });
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {
     Fetch();
   }, []);
 
-  return { data };
+  return {data};
 };
 
-const fetchChannel = async (id) => {
+const fetchChannel = async id => {
   try {
     const res = await fetch(
       Apilinks.CHANNEL_HTTP +
@@ -94,7 +92,7 @@ const fetchChannel = async (id) => {
           key: Apilinks.API_KEY,
           part: 'snippet',
           id: id,
-        })
+        }),
     ).then(res => res.json());
 
     if (res.items.length > 0) {
@@ -107,7 +105,7 @@ const fetchChannel = async (id) => {
   // return null;
 };
 
-const FetchComments = async (videoid) => {
+const FetchComments = async videoid => {
   await fetch(
     Apilinks.COMMENTS_HTTP +
       new URLSearchParams({
@@ -116,16 +114,42 @@ const FetchComments = async (videoid) => {
         videoId: videoid,
       }),
   )
-    .then((res) => res.json())
-    .then((data) => {
-      data.items.forEach((item) => {
+    .then(res => res.json())
+    .then(data => {
+      data.items.forEach(item => {
         // getChannelIcon(item);
         console.log(item.snippet.topLevelComment.snippet);
         // fetchComments(item.id);
       });
     })
-    .catch((err) => console.log(err));
+    .catch(err => console.log(err));
 };
 
-export { FetchVideo, FetchCategories, fetchChannel, FetchComments };
-
+const Search = async params => {
+  try {
+    const res = await fetch(
+      Apilinks.SEARCH_HTTP +
+        new URLSearchParams({
+          key: Apilinks.API_KEY,
+          part: 'snippet',
+          maxResults: 5,
+          q: params,
+        }),
+    )
+      .then(res => res.json())
+      .then(res => {
+        const data = res.items;
+        console.log(data);
+        return data;
+      });
+    // if (res.items.length > 0) {
+    // console.log(res.items)
+    // const data = res.items;
+    // console.log(data);
+    // return data;
+    // }
+  } catch (err) {
+    console.log(err);
+  }
+};
+export {FetchVideo, FetchCategories, fetchChannel, FetchComments, Search};

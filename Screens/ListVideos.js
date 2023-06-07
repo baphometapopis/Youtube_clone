@@ -10,7 +10,6 @@ import {
 import {Color} from '../Constant';
 import aveta from 'aveta';
 import {converter} from '../function/dateConverter';
-import useFetchChannel from '../Customhooks/useFetchChannel';
 const windowWidth = Dimensions.get('window').width;
 
 export default ListVideos = ({item, navigation}) => {
