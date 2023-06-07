@@ -16,7 +16,7 @@ const windowWidth = Dimensions.get('window').width;
 
 export const SearchCategories = item => {
   const navigate = useNavigation();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); 
 
   const searchHAnder = useCallback(async () => {
     const heef = await Search(item.route.params);
