@@ -39,6 +39,7 @@ const SuggestQueriesComponent = () => {
           placeholder="Youtube Search"
           value={query}
           onChangeText={handleQueryChange}
+          placeholderTextColor={"white"}
         />
         <TouchableOpacity style={styles.mic}>
           <BackArrow name="microphone-outline" color="white" size={23} />
@@ -50,7 +51,7 @@ const SuggestQueriesComponent = () => {
           <TouchableOpacity style={styles.suggestion} onPress={()=>{navigate.navigate('SearchCategories',item); console.log(item)}}>
             <Search name="search" color="white" size={23} style={{marginHorizontal:10}}/>
 
-            <Text style={{fontSize: 20, marginRight: 10}}>{item}</Text>
+            <Text style={{fontSize: 20, marginRight: 10,color:'white'}}>{item}</Text>
             <BackArrow name="arrow-top-left" color="white" size={23} />
 
           </TouchableOpacity>
@@ -77,6 +78,8 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 15,
     fontSize: 16,
+    
+    // tintColor:'white'
   },
 
   searchContainer: {

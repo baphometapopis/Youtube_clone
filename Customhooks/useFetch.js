@@ -125,7 +125,8 @@ const FetchComments = async videoid => {
     .catch(err => console.log(err));
 };
 
-const Search = async params => {
+
+const Search = async (params) => {
   try {
     const res = await fetch(
       Apilinks.SEARCH_HTTP +
@@ -136,20 +137,18 @@ const Search = async params => {
           q: params,
         }),
     )
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         const data = res.items;
         console.log(data);
         return data;
       });
-    // if (res.items.length > 0) {
-    // console.log(res.items)
-    // const data = res.items;
-    // console.log(data);
-    // return data;
-    // }
+
+    return res;
   } catch (err) {
     console.log(err);
   }
 };
+
+
 export {FetchVideo, FetchCategories, fetchChannel, FetchComments, Search};
