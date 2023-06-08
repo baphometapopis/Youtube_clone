@@ -27,7 +27,7 @@ export const SearchCategories = (item) => {
   return (
     <SafeAreaView style={styles.container}>
 
-      {console.log(searchResults,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')}
+      {/* {console.log(searchResults,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')} */}
       <Text style={{ color: 'white' }}></Text>
       <FlatList
         data={searchResults}

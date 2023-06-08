@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState,useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,6 +19,7 @@ import Modal from 'react-native-modal';
 import { ScrollView } from 'react-native';
 export const Details = prop => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [statistic,setStatistics]= useState(0);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -33,7 +34,28 @@ export const Details = prop => {
     inputRange: [0, 200],
     outputRange: [0, -200],
   });
-  console.log(id);
+
+  // console.log(prop.route.params.item)
+
+  useEffect(()=>{
+    if (prop.route.params.item.kind=='youtube#video')
+    {
+      setStatistics(statistics?.viewCount)
+
+
+      
+    }else{
+      setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount)
+            console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
+
+
+    }
+
+  },[statistic])
+
+  console.log(statistic)
+
+
   return (
     <View style={styles.container}>
       <View style={styles.screenContainer}>
@@ -55,7 +77,7 @@ export const Details = prop => {
           <View style={{flexDirection: 'row'}}>
             <View>
               <Text numberOfLines={1} style={styles.cdesc}>
-                {aveta(statistics.viewCount, {digits: 2, lowercase: true})}
+                {aveta(statistic , {digits: 2, lowercase: true})}
                 Views &nbsp;
                 {converter(publishedAt)}
                 &nbsp;

@@ -90,14 +90,19 @@ const fetchChannel = async id => {
       Apilinks.CHANNEL_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
-          part: 'snippet',
+          part: "snippet,contentDetails,statistics",
           id: id,
         }),
     ).then(res => res.json());
+    const channelInfo=[]
 
     if (res.items.length > 0) {
+      const customUrl=res.items[0].snippet.customUrl
+      const subscriberCount=(res.items[0]?.statistics?.subscriberCount)
       const channelImage = res.items[0]?.snippet?.thumbnails?.high;
-      return channelImage;
+      channelInfo.push({...channelImage,customUrl,subscriberCount,});
+
+      return channelInfo;
     }
   } catch (err) {
     console.log(err);
@@ -125,8 +130,7 @@ const FetchComments = async videoid => {
     .catch(err => console.log(err));
 };
 
-
-const Search = async (params) => {
+const Search = async params => {
   try {
     const res = await fetch(
       Apilinks.SEARCH_HTTP +
@@ -137,11 +141,21 @@ const Search = async (params) => {
           q: params,
         }),
     )
-      .then((res) => res.json())
-      .then((res) => {
-        const data = res.items;
-        console.log(data);
-        return data;
+      .then(res => res.json())
+      .then(async res => {
+        const DataVideoWithID = [];
+        console.log(res)
+        for (const data of res.items) {
+
+          const videoId = await fetchVideoByID(data.id.videoId);
+          const channel = await fetchChannel(data.snippet.channelId);
+          console.log('>>>>>>>>>>>>>', channel);
+
+
+          DataVideoWithID.push({...data,...videoId,...channel});
+        }
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
+        return DataVideoWithID;
       });
 
     return res;
@@ -150,5 +164,24 @@ const Search = async (params) => {
   }
 };
 
+const fetchVideoByID = async (id) => {
+  try {
+    const res = await fetch(
+      Apilinks.VIDEO_HTTP +
+        new URLSearchParams({
+          key: Apilinks.API_KEY,
+          part: 'contentDetails,statistics',
+          id:id
+        }),
+    ).then(res => res.json());
+
+ 
+        
+
+    return res
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export {FetchVideo, FetchCategories, fetchChannel, FetchComments, Search};
