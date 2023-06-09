@@ -10,17 +10,18 @@ export const SearchCategories = (item) => {
   const [searchResults, setSearchResults] = useState([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const performSearch = async () => {
-      try {
-        
-        const results = await Search(item.route.params); 
-        setSearchResults(results);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const performSearch = async () => {
+    try {
+      
+      const results = await Search(item.route.params); 
+      setSearchResults(results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+ 
     performSearch();
   }, [item.route.params]);
 

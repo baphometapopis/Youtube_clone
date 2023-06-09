@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {Apilinks} from '../Constant';
-import SuggestQueriesComponent from '../Screens/SearchSuggestion';
 
 const FetchVideo = () => {
   const [data, setData] = useState([]);
@@ -23,8 +22,8 @@ const FetchVideo = () => {
       const DataVideoWithID = [];
 
       for (const data of res.items) {
-        const channel = await fetchChannel(data.snippet.channelId);
-        DataVideoWithID.push({...data, ...channel});
+        const {channelInfo} = await fetchChannel(data.snippet.channelId);
+        DataVideoWithID.push({...data, ...channelInfo});
       }
 
       // res.items.forEach(async element => {
@@ -90,10 +89,11 @@ const fetchChannel = async id => {
       Apilinks.CHANNEL_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
-          part: "snippet,contentDetails,statistics",
+          part: "brandingSettings,snippet,topicDetails,id,statistics",
           id: id,
         }),
     ).then(res => res.json());
+    const channelData=res.items;
     const channelInfo=[]
 
     if (res.items.length > 0) {
@@ -102,7 +102,7 @@ const fetchChannel = async id => {
       const channelImage = res.items[0]?.snippet?.thumbnails?.high;
       channelInfo.push({...channelImage,customUrl,subscriberCount,});
 
-      return channelInfo;
+      return {channelInfo,channelData};
     }
   } catch (err) {
     console.log(err);
@@ -148,11 +148,11 @@ const Search = async params => {
         for (const data of res.items) {
 
           const videoId = await fetchVideoByID(data.id.videoId);
-          const channel = await fetchChannel(data.snippet.channelId);
-          console.log('>>>>>>>>>>>>>', channel);
+          const {channelInfo} = await fetchChannel(data.snippet.channelId);
+          console.log('>>>>>>>>>>>>>', channelInfo);
 
 
-          DataVideoWithID.push({...data,...videoId,...channel});
+          DataVideoWithID.push({...data,...videoId,...channelInfo});
         }
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
         return DataVideoWithID;

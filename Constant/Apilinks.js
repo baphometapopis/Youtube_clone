@@ -6,6 +6,8 @@ export default {
   COMMENTS_HTTP: `${URL_http}commentThreads?`,
   CATEGORIES_HTTP:`${URL_http}videoCategories?`,
   CHANNEL_HTTP:`${URL_http}channels?`,
-  SEARCH_HTTP:`${URL_http}search?`
-  
+  SEARCH_HTTP:`${URL_http}search?`,
+  PLAYLIST_HTTP:`${URL_http}playlists?`,
+  PLAYLISTITEM_HTTP:`${URL_http}playlistItems?`,
+
 };

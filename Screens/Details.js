@@ -1,4 +1,4 @@
-import React, {useCallback, useState,useEffect} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,14 +12,14 @@ import {Color} from '../Constant';
 import aveta from 'aveta';
 import {converter} from '../function/dateConverter';
 import {useNavigation} from '@react-navigation/native';
-import useFetch, { FetchVideo } from '../Customhooks/useFetch';
+import useFetch, {FetchVideo} from '../Customhooks/useFetch';
 const windowWidth = Dimensions.get('window').width;
 import WebView from 'react-native-webview';
 import Modal from 'react-native-modal';
-import { ScrollView } from 'react-native';
+import {ScrollView} from 'react-native';
 export const Details = prop => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [statistic,setStatistics]= useState(0);
+  const [statistic, setStatistics] = useState(0);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -37,24 +37,16 @@ export const Details = prop => {
 
   // console.log(prop.route.params.item)
 
-  useEffect(()=>{
-    if (prop.route.params.item.kind=='youtube#video')
-    {
-      setStatistics(statistics?.viewCount)
-
-
-      
-    }else{
-      setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount)
-            console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
-
-
+  useEffect(() => {
+    if (prop.route.params.item.kind == 'youtube#video') {
+      setStatistics(statistics?.viewCount);
+    } else {
+      setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount);
+      console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
     }
+  }, [statistic]);
 
-  },[statistic])
-
-  console.log(statistic)
-
+  console.log(statistic);
 
   return (
     <View style={styles.container}>
@@ -71,13 +63,13 @@ export const Details = prop => {
           styles.descContainer,
           {transform: [{translateY: translateY}], elevation: 2, zIndex: -1},
         ]}> */}
-        <ScrollView>
+      <ScrollView>
         <View style={styles.descContainer}>
           <Text style={styles.ctitle}>{title}</Text>
           <View style={{flexDirection: 'row'}}>
             <View>
               <Text numberOfLines={1} style={styles.cdesc}>
-                {aveta(statistic , {digits: 2, lowercase: true})}
+                {aveta(statistic, {digits: 2, lowercase: true})}
                 Views &nbsp;
                 {converter(publishedAt)}
                 &nbsp;
@@ -93,7 +85,7 @@ export const Details = prop => {
         <View style={styles.commentContainer}>
           <Text>this is comment page</Text>
         </View>
-      {/* </Animated.View> */}
+        {/* </Animated.View> */}
       </ScrollView>
       <View style={styles.contentContainer}>
         <FlatList
@@ -108,7 +100,7 @@ export const Details = prop => {
         />
       </View>
       <Modal
-         onBackdropPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
         onBackButtonPress={() => setModalVisible(false)}
         isVisible={isModalVisible}
         swipeDirection="down"
@@ -144,20 +136,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // flex: 0.3,
     // backgroundColor: 'red',
-    height:250,
-    width:windowWidth
+    height: 250,
+    width: windowWidth,
   },
   descContainer: {
     //  flex: ,
     padding: 10,
-     backgroundColor: 'green',
+    backgroundColor: 'green',
   },
   commentContainer: {
-     flex: 0.1,
-     backgroundColor: 'blue',
+    flex: 0.1,
+    backgroundColor: 'blue',
   },
   contentContainer: {
-     flex: 0.6,
+    flex: 0.6,
     //  backgroundColor: 'yellow',
   },
   backgroundVideo: {

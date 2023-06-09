@@ -1,28 +1,19 @@
 import React from 'react';
-import useFetch from './Customhooks/useFetch';
 import {NavigationContainer} from '@react-navigation/native';
+import   store  from './Redux/Store'
+import { Provider } from 'react-redux'
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  SafeAreaView,
-  Button,
-} from 'react-native';
-import fetchVideo from './Customhooks/useFetch';
-import FetchComments from './Customhooks/useFetchComments';
+
 import {StackNavigation} from './Navigations/StackNavigation';
 
 function App() {
-  // const {data, loading, error} = useFetch(url);
-
-  // console.log(fetchVideo());
-
   return (
+    <Provider store={store}>  
+
     <NavigationContainer>
       <StackNavigation />
     </NavigationContainer>
+    </Provider>
   );
 }
 

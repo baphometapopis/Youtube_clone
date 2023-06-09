@@ -26,10 +26,14 @@ export default ListVideos = ({item, navigation}) => {
           style={styles.image}
         />
         <View style={styles.descContainer}>
-          <TouchableOpacity style={styles.channellogo}>
+          <TouchableOpacity
+            style={styles.channellogo}
+            onPress={() => {
+              navigation.navigate('ChannelDetail', {item});
+            }}>
             <Image
               source={{
-                uri: `${item?.url}`,
+                uri: `${item[0]?.url}`,
               }}
               style={styles.logo}
             />
@@ -43,7 +47,10 @@ export default ListVideos = ({item, navigation}) => {
                 {item?.snippet?.channelTitle}
               </Text>
               <Text style={styles.titleDesc}>
-                {aveta(item?.statistics?.viewCount, {digits: 2, lowercase: true})}
+                {aveta(item?.statistics?.viewCount, {
+                  digits: 2,
+                  lowercase: true,
+                })}
                 Views
               </Text>
               <Text style={styles.titleDesc}>
