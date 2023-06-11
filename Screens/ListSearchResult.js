@@ -40,7 +40,9 @@ export default function ListSearchResult({item, navigation}) {
               subscribers
             </Text>
             <TouchableOpacity style={styles.subscribeButton}>
-              <Text style={{color:'black',fontWeight:'bold'}}>Subscribe</Text>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Subscribe
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

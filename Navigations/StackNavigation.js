@@ -5,7 +5,8 @@ import {Details} from '../Screens/Details';
 import {TabNavigation} from './TabNavigation';
 import SuggestQueriesComponent from '../Screens/SearchSuggestion';
 import { SearchCategories } from '../Screens/SearchCategories';
-import { ChannelDetail } from '../Screens/ChannelDetail';
+import { ChannelDetail } from '../Screens/ChannelScreens/ChannelDetail';
+import { ChannelPlaylistList } from '../Screens/ChannelScreens/ChannelPlaylistList';
 
 export const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ export const StackNavigation = () => {
       <Stack.Screen name='Search' component={SuggestQueriesComponent}/>
       <Stack.Screen name='SearchCategories' component={SearchCategories}/>
       <Stack.Screen name='ChannelDetail' component={ChannelDetail}/>
+      <Stack.Screen name='listPlaylistItem' component={ChannelPlaylistList}/>
 
     </Stack.Navigator>
   );

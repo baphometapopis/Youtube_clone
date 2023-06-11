@@ -15,7 +15,7 @@ export const TopTabNavigation = ({channelId}) => {
         screenOptions={{
           tabBarStyle: {backgroundColor: 'black'},
           tabBarInactiveTintColor: Color.TEXTDESC,
-          tabBarActiveTintColor: 'White',
+          tabBarActiveTintColor: 'white',
         }} channelId={channelId}>
         <Tab.Screen
           name="HomeChannel"

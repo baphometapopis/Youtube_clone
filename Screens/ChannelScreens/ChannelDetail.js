@@ -7,13 +7,13 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {fetchChannel} from '../Customhooks/useFetch';
+import {fetchChannel} from '../../Customhooks/useFetch';
 import aveta from 'aveta';
-import {Color} from '../Constant';
+import {Color} from '../../Constant';
 import {TouchableOpacity} from 'react-native';
-import { TopTabNavigation } from '../Navigations/TopTabNavigation';
+import { TopTabNavigation } from '../../Navigations/TopTabNavigation';
 import { useDispatch } from 'react-redux';
-import {setChannelId} from '../Redux/ChannelSlice';
+import {setChannelId} from '../../Redux/ChannelSlice';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -21,7 +21,6 @@ export const ChannelDetail = props => {
   const [channelResults, setChannelResults] = useState([]);
   const dispatch = useDispatch();
   const data = props.route.params;
-  // console.log(data.item.snippet.channelId);
 
   const GetChannelDetails = async () => {
     try {

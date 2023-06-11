@@ -1,24 +1,22 @@
-import {Apilinks} from '../Constant';
-import { useSelector } from 'react-redux';
+import { Apilinks } from '../Constant';
 
-const fetchChannelPlaylist = async() => {
-    const {channelId} = useSelector((state)=>state.channel)
-
+const fetchChannelPlaylist = async (channelId) => {
   try {
     const res = await fetch(
       Apilinks.PLAYLIST_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'contentDetails,snippet',
-          maxResults:25,
-          channelId: 'UCtgGOdTlM-NdJ9rPKIYN8UQ',
-        }),
-    ).then(res => res.json());
+          maxResults: 25,
+          channelId: channelId,
+        })
+    );
 
-    return res;
+    const data = await res.json();
+    return data;
   } catch (err) {
     console.log(err);
   }
 };
 
-export {fetchChannelPlaylist};
+export { fetchChannelPlaylist };
