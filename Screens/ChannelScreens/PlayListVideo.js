@@ -12,7 +12,7 @@ import {converter} from '../../function/dateConverter';
 const windowWidth = Dimensions.get('window').width;
 
 export const PlayListVideo = ({item, navigate}) => {
-    console.log(item)
+    // console.log(item)
     return (
     <View style={styles.item}>
       <TouchableOpacity>

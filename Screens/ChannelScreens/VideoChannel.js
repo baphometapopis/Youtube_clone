@@ -27,18 +27,10 @@ export const VideoChannel = () => {
   const fetchData = async () => {
     console.log('Fetching playlist...');
     const data = await fetchChannelPlaylist(channelId);
-    setPlaylist(data.items);
+    setPlaylist(data.items); 
   };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    // try {
-
-    // } catch (error) {
-    // console.log(error);
-    // }
-    // };
-
     fetchData();
   }, [channelId]);
 

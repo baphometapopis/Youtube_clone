@@ -28,7 +28,7 @@ export const ShortsChannel = () => {
     performSearch();
   }, [channelId,channelName]);
 
-console.log(searchResults)
+// console.log(searchResults)
   return (
     <SafeAreaView style={styles.container}>
       <FlatList

@@ -13,7 +13,7 @@ import {converter} from '../function/dateConverter';
 const windowWidth = Dimensions.get('window').width;
 
 export default function ListSearchResult({item, navigation}) {
-  console.log('BBBBBBBBBBBBBBBBBBBBBBBB', item);
+  // console.log('BBBBBBBBBBBBBBBBBBBBBBBB', item);
   return (
     <>
       {item.id.kind === 'youtube#channel' ? (
@@ -59,7 +59,7 @@ export default function ListSearchResult({item, navigation}) {
               style={styles.image}
             />
             <View style={styles.descContainer}>
-              <TouchableOpacity style={styles.channellogo}>
+              <TouchableOpacity  onPress={()=>{navigation.navigate('ChannelDetail', {item});}} style={styles.channellogo}>
                 <Image
                   source={{
                     uri: `${item[0]?.url}`,

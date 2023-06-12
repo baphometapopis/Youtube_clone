@@ -8,11 +8,11 @@ import {createSlice} from '@reduxjs/toolkit';
     reducers: {
       setChannelId: (state, action) => {
          state.channelId = action.payload;
-         console.log(action.payload)
+        //  console.log(action.payload)
       },
       setChannelName: (state, action) => {
         state.channelName = action.payload;
-        console.log(action.payload)
+        // console.log(action.payload)
      }
     }
   });

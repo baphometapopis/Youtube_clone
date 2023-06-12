@@ -7,7 +7,7 @@ const fetchChannelPlaylist = async (channelId) => {
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'contentDetails,snippet',
-          maxResults: 25,
+          maxResults: Apilinks.MAX_RESULT,
           channelId: channelId,
         })
     );
@@ -27,7 +27,7 @@ const fetchChannelPlaylistItems = async (playlistId) => {
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'contentDetails,snippet',
-          maxResults: 25,
+          maxResults: Apilinks.MAX_RESULT,
           playlistId: playlistId,
         })
     );
@@ -41,14 +41,14 @@ const fetchChannelPlaylistItems = async (playlistId) => {
 };
 
 const FetchChannelsShort = async (params) => {
-  console.log(params[0]?.channelName)
+  // console.log(params[0]?.channelName)
   try {
     const res = await fetch(
       Apilinks.SEARCH_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'snippet',
-          maxResults: 25,
+          maxResults: Apilinks.MAX_RESULT,
           q: `${params[0]?.channelName} Shorts`,
           type:'video',
           // videoDuration:'short',

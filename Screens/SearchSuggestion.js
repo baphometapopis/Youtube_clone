@@ -48,7 +48,7 @@ const SuggestQueriesComponent = () => {
       <FlatList
         data={suggestions}
         renderItem={({item}) => (
-          <TouchableOpacity style={styles.suggestion} onPress={()=>{navigate.navigate('SearchCategories',item); console.log(item)}}>
+          <TouchableOpacity style={styles.suggestion} onPress={()=>{navigate.navigate('SearchCategories',item)}}>
             <Search name="search" color="white" size={23} style={{marginHorizontal:10}}/>
 
             <Text style={{fontSize: 20, marginRight: 10,color:'white'}}>{item}</Text>

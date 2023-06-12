@@ -21,7 +21,7 @@ export const ChannelDetail = props => {
   const [channelResults, setChannelResults] = useState([]);
   const dispatch = useDispatch();
   const data = props.route.params;
-  console.log(data.item.snippet.channelTitle)
+  // console.log(data.item.snippet.channelTitle)
 
   const GetChannelDetails = async () => {
     try {
@@ -39,7 +39,7 @@ export const ChannelDetail = props => {
     
 
   }, [data.item.snippet.channelId]);
-  console.log('qqqqqqqqqqqqqqqq', channelResults[0]?.brandingSettings?.channel?.title);
+  // console.log('qqqqqqqqqqqqqqqq', channelResults[0]?.brandingSettings?.channel?.title);
 
   return (
     <SafeAreaView style={styles.container}>

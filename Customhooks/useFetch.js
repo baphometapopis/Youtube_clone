@@ -14,7 +14,7 @@ const FetchVideo = () => {
             key: Apilinks.API_KEY,
             part: 'snippet,contentDetails,statistics',
             chart: 'mostPopular',
-            maxResults: 5,
+            maxResults: Apilinks.MAX_RESULT,
             regionCode: 'IN',
           }),
       ).then(res => res.json());
@@ -137,24 +137,24 @@ const Search = async params => {
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'snippet',
-          maxResults: 5,
+          maxResults: Apilinks.MAX_RESULT,
           q: params,
         }),
     )
       .then(res => res.json())
       .then(async res => {
         const DataVideoWithID = [];
-        console.log(res)
+        // console.log(res)
         for (const data of res.items) {
 
           const videoId = await fetchVideoByID(data.id.videoId);
           const {channelInfo} = await fetchChannel(data.snippet.channelId);
-          console.log('>>>>>>>>>>>>>', channelInfo);
+          // console.log('>>>>>>>>>>>>>', channelInfo);
 
 
           DataVideoWithID.push({...data,...videoId,...channelInfo});
         }
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
         return DataVideoWithID;
       });
 

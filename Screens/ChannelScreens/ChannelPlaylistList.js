@@ -44,7 +44,7 @@ export const ChannelPlaylistList = prop => {
   useEffect(() => {
     GetPlaylistItems();
   }, [prop.route.params.PlaylistID]);
-  console.log(playlistItem);
+  // console.log(playlistItem);
   return (
     <SafeAreaView style={styles.container}>
       {playlistItem ? (

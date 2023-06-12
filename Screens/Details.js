@@ -35,14 +35,14 @@ export const Details = prop => {
     outputRange: [0, -200],
   });
 
-   console.log(id)
+  //  console.log(id)
 
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
       setStatistics(statistics?.viewCount);
     } else {
       setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount);
-      console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
+      // console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
     }
   }, [statistic]);
 
