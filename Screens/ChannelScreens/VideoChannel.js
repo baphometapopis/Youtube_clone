@@ -13,46 +13,11 @@ import {useSelector} from 'react-redux';
 import {fetchChannelPlaylist} from '../../Customhooks/useFetchChannelData';
 import {converter} from '../../function/dateConverter';
 import {Color} from '../../Constant';
-const windowWidth = Dimensions.get('window').width;
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { PlayListItemList } from './PlaylistItemList';
 
-const Item = ({items,navigate}) => {
-  const PlaylistID = items.id;
-  return(
-  
-  <View style={styles.item}>
-    <TouchableOpacity onPress={()=>{navigate.navigate('listPlaylistItem',{PlaylistID})}}>
-    
-    <View
-      style={{flexDirection: 'row', marginVertical: 10, width: windowWidth}}>
-      <View>
-        <Image
-          source={{
-            uri: `${items?.snippet?.thumbnails?.maxres?.url}`,
-          }}
-          style={styles.image}
-        />
-        <View style={styles.videocount}>
-        <Icons name="playlist-play" size={20} color="white" />
 
-          <Text style={{color: 'white'}}>{items?.contentDetails?.itemCount}</Text>
-        </View>
-      </View>
-      <View style={{marginHorizontal: 10, width: 140}}>
-        <Text numberOfLines={3} style={{color: Color.TEXT}}>
-          {items?.snippet?.title}
-        </Text>
-        <Text style={styles.desc}>{items.snippet.channelTitle}</Text>
-        <Text style={styles.desc}>
-          updated {converter(items.snippet.publishedAt)}
-        </Text>
-      </View>
-    </View>
-    </TouchableOpacity>
-  </View>
-
-);}
 
 export const VideoChannel = () => {
   const [playlist, setPlaylist] = useState([]);
@@ -77,13 +42,13 @@ export const VideoChannel = () => {
     fetchData();
   }, [channelId]);
 
-  console.log(playlist);
+  // console.log(playlist);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={playlist}
-        renderItem={({item}) => <Item items={item} navigate={navigate} />}
+        renderItem={({item}) => <PlayListItemList items={item} navigate={navigate} />}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>

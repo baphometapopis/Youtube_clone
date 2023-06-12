@@ -35,7 +35,7 @@ export const Details = prop => {
     outputRange: [0, -200],
   });
 
-  // console.log(prop.route.params.item)
+   console.log(id)
 
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
@@ -46,7 +46,6 @@ export const Details = prop => {
     }
   }, [statistic]);
 
-  console.log(statistic);
 
   return (
     <View style={styles.container}>

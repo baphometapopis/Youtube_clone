@@ -13,7 +13,7 @@ import {Color} from '../../Constant';
 import {TouchableOpacity} from 'react-native';
 import { TopTabNavigation } from '../../Navigations/TopTabNavigation';
 import { useDispatch } from 'react-redux';
-import {setChannelId} from '../../Redux/ChannelSlice';
+import {setChannelId, setChannelName} from '../../Redux/ChannelSlice';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -21,9 +21,12 @@ export const ChannelDetail = props => {
   const [channelResults, setChannelResults] = useState([]);
   const dispatch = useDispatch();
   const data = props.route.params;
+  console.log(data.item.snippet.channelTitle)
 
   const GetChannelDetails = async () => {
     try {
+      dispatch(setChannelId(data.item.snippet.channelId))
+    dispatch(setChannelName(data.item.snippet.channelTitle))
       const {channelData} = await fetchChannel(data.item.snippet.channelId);
       setChannelResults(channelData);
     } catch (error) {
@@ -33,9 +36,10 @@ export const ChannelDetail = props => {
 
   useEffect(() => {
     GetChannelDetails();
-    dispatch(setChannelId(data.item.snippet.channelId))
+    
+
   }, [data.item.snippet.channelId]);
-  console.log('qqqqqqqqqqqqqqqq', channelResults[0]?.id);
+  console.log('qqqqqqqqqqqqqqqq', channelResults[0]?.brandingSettings?.channel?.title);
 
   return (
     <SafeAreaView style={styles.container}>
