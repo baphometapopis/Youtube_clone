@@ -9,5 +9,5 @@ export default {
   SEARCH_HTTP:`${URL_http}search?`,
   PLAYLIST_HTTP:`${URL_http}playlists?`,
   PLAYLISTITEM_HTTP:`${URL_http}playlistItems?`,
-  MAX_RESULT:50  
+  MAX_RESULT:5  
 };

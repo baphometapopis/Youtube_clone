@@ -7,17 +7,26 @@ import {
   Dimensions,
   TouchableOpacity,
   Animated,
+  Image,
 } from 'react-native';
 import {Color} from '../Constant';
 import aveta from 'aveta';
-import {converter} from '../function/dateConverter';
+import {converter, getDateFormatted, getYear} from '../function/dateConverter';
 import {useNavigation} from '@react-navigation/native';
 import useFetch, {FetchVideo} from '../Customhooks/useFetch';
 const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 import WebView from 'react-native-webview';
 import Modal from 'react-native-modal';
 import {ScrollView} from 'react-native';
+import {Categories} from '../Components/Categories';
+
+import Close from 'react-native-vector-icons/EvilIcons';
+
 export const Details = prop => {
+  const [scrollY] = useState(new Animated.Value(0));
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [statistic, setStatistics] = useState(0);
   const toggleModal = () => {
@@ -25,48 +34,57 @@ export const Details = prop => {
   };
   const navigate = useNavigation();
   const {data} = FetchVideo();
-  const {title, tags, localized, publishedAt, channelTitle} =
+  const {title,description, tags, localized, publishedAt, channelTitle} =
     prop.route.params.item.snippet;
   const {statistics, id} = prop.route.params.item;
-  const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, 200);
-  const translateY = diffClamp.interpolate({
-    inputRange: [0, 200],
-    outputRange: [0, -200],
+  console.log(description);
+
+  const AnimatedHeaderValue = new Animated.Value(0);
+  const HEADER_MAX_HEIGHT = 150;
+  const HEADER_MIN_HEIGHT = 40;
+
+  const animatedHeaderHeight = AnimatedHeaderValue.interpolate({
+    inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    extrapolate: 'clamp',
   });
 
-  //  console.log(id)
+  const fadeAnimCategories = AnimatedHeaderValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+  const fadeoutAnim = AnimatedHeaderValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
 
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
       setStatistics(statistics?.viewCount);
     } else {
       setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount);
-      // console.log(prop.route.params.item.items[0]?.statistics?.viewCount);
+      // console.log(prop.route.params.item.irtems[0]?.statistics?.viewCount);
     }
   }, [statistic]);
-
 
   return (
     <View style={styles.container}>
       <View style={styles.screenContainer}>
         <WebView
-          style={{width: windowWidth, height: 230}}
+          style={{width: windowWidth, height: 200}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           source={{uri: `https://www.youtube.com/embed/${id}`}}
         />
       </View>
-      {/* <Animated.View
-        style={[
-          styles.descContainer,
-          {transform: [{translateY: translateY}], elevation: 2, zIndex: -1},
-        ]}> */}
-      <ScrollView>
-        <View style={styles.descContainer}>
+      <Animated.View style={[{height: animatedHeaderHeight}]}>
+        <Animated.View style={[styles.descContainer, {opacity: fadeoutAnim}]}>
           <Text style={styles.ctitle}>{title}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <View>
+          <View
+            style={{flexDirection: 'row', marginRight: 10, flexWrap: 'wrap'}}>
+            <>
               <Text numberOfLines={1} style={styles.cdesc}>
                 {aveta(statistic, {digits: 2, lowercase: true})}
                 Views &nbsp;
@@ -74,30 +92,64 @@ export const Details = prop => {
                 &nbsp;
                 {tags ? `#${tags}` : null}
               </Text>
-            </View>
+            </>
             <TouchableOpacity onPress={toggleModal}>
               <Text style={styles.more}>..More</Text>
             </TouchableOpacity>
           </View>
-          <Text style={{color: 'green'}}></Text>
-        </View>
-        <View style={styles.commentContainer}>
-          <Text>this is comment page</Text>
-        </View>
-        {/* </Animated.View> */}
-      </ScrollView>
-      <View style={styles.contentContainer}>
-        <FlatList
-          data={data}
-          renderItem={({item}) => (
-            <ListVideos item={item} navigation={navigate} />
-          )}
-          keyExtractor={item => item.id}
-          onScroll={e => {
-            scrollY.setValue(e.nativeEvent.contentOffset.y);
-          }}
-        />
-      </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity>
+                <Image
+                  source={{
+                    uri: `${prop.route.params.item[0]?.url}`,
+                  }}
+                  style={styles.channelLogo}
+                />
+              </TouchableOpacity>
+              <Text
+                numberOfLines={1}
+                style={{color: 'white', maxWidth: 200, marginHorizontal: 5}}>
+                {channelTitle}
+              </Text>
+              <Text style={{color: Color.TEXTDESC}}>
+                {' '}
+                {aveta(prop.route.params.item[0]?.subscriberCount || 2, {
+                  digits: 2,
+                  lowercase: false,
+                })}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={{backgroundColor: 'white', padding: 5, borderRadius: 25}}>
+              <Text style={{color: 'black'}}>Subscribe</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+        <Animated.View
+          style={[{opacity: fadeAnimCategories}, styles.categoryContainer]}>
+          <Categories />
+        </Animated.View>
+      </Animated.View>
+
+      <FlatList
+        initialNumToRender={5}
+        scrollEventThrottle={1}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: AnimatedHeaderValue}}}],
+          {useNativeDriver: false},
+        )}
+        data={data}
+        renderItem={({item}) => (
+          <ListVideos item={item} navigation={navigate} />
+        )}
+      />
       <Modal
         onBackdropPress={() => setModalVisible(false)}
         onBackButtonPress={() => setModalVisible(false)}
@@ -113,9 +165,113 @@ export const Details = prop => {
         backdropColor="transparent"
         style={styles.modal}>
         <View style={styles.modalContent}>
-          <View style={styles.center}>
-            <View style={styles.barIcon} />
-            <Text style={styles.text}>Welcome To My Bottom Sheet</Text>
+          <View style={styles.barIcon} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginVertical: 5,
+            }}>
+            <Text style={{color: 'white', fontSize: 20}}>Description</Text>
+   
+            <TouchableOpacity onPress={()=>setModalVisible(false)}>
+            <Close  name="close" color="white" size={30} />
+            </TouchableOpacity>
+          
+          </View>
+          <View
+            style={{
+              borderBottomColor: 'grey',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+          <Text style={{color: 'white', fontSize: 18}}> `{title}</Text>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: 25,
+              marginBottom:15,
+            }}>
+            <View style={{justifyContent:'center',alignItems:'center'}}>
+              <Text style={{color: 'white'}}> {aveta(statistics?.likeCount, {
+                  digits: 2,
+                  lowercase: true,
+                })}</Text>
+              <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Likes</Text>
+            </View>
+            <View style={{justifyContent:'center',alignItems:'center'}}>
+              <Text style={{color: 'white'}}>{aveta(statistics?.viewCount, {
+                  digits: 2,
+                  lowercase: true,
+                })}</Text>
+              <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Views</Text>
+            </View>
+            <View style={{justifyContent:'center',alignItems:'center'}}>
+              <Text style={{color: 'white'}}>{getDateFormatted(prop.route.params.item.snippet.publishedAt)}</Text>
+              <Text style={{color: Color.TEXTDESC}}>{getYear(prop.route.params.item.snippet.publishedAt)}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              borderBottomColor: 'grey',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+
+          <View>
+            <Text style={{color:'white'}}>{title}</Text>
+
+            <Text numberOfLines={3} style={{color:'white',marginTop:25}}>{description}</Text>
+
+
+          </View>
+
+          
+          <View
+            style={{
+              borderBottomColor: 'grey',
+              borderBottomWidth: 4,
+            }}
+          />
+          <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity>
+                <Image
+                  source={{
+                    uri: `${prop.route.params.item[0]?.url}`,
+                  }}
+                  style={styles.channelModalLogo}
+                />
+              </TouchableOpacity>
+              <View style={{margin:10}}>
+              <Text
+                numberOfLines={1}
+                style={{color: 'white', maxWidth: 200}}>
+                {channelTitle}
+              </Text>
+              <Text style={{color: Color.TEXTDESC}}>
+                
+                {aveta(prop.route.params.item[0]?.subscriberCount || 2, {
+                  digits: 2,
+                  lowercase: false,
+                })} Subscriber
+              </Text>
+              </View>
+            </View>
+           
+          </View>
+          <TouchableOpacity
+              style={{backgroundColor: 'white', padding: 5, borderRadius: 25 ,width:100,alignItems:'center'}}>
+              <Text style={{color: 'black'}}>Video</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -124,7 +280,7 @@ export const Details = prop => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: 'black',
     flex: 1,
   },
   text: {
@@ -133,19 +289,18 @@ const styles = StyleSheet.create({
   screenContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // flex: 0.3,
-    // backgroundColor: 'red',
-    height: 250,
+
+    height: 200,
     width: windowWidth,
   },
   descContainer: {
-    //  flex: ,
     padding: 10,
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
+    height: 150,
   },
   commentContainer: {
     flex: 0.1,
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
   },
   contentContainer: {
     flex: 0.6,
@@ -160,19 +315,20 @@ const styles = StyleSheet.create({
   },
   ctitle: {
     color: 'white',
-    fontSize: 23,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   cdesc: {
     color: Color.TEXTDESC,
     marginTop: 10,
     fontSize: 12,
+    textAlign: 'left',
+    width: 250,
   },
   more: {
     marginTop: 10,
     color: 'white',
     fontSize: 12,
-    marginRight: 20,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -184,6 +340,9 @@ const styles = StyleSheet.create({
 
     elevation: 19,
   },
+  categoryContainer: {
+    position: 'absolute',
+  },
 
   modal: {
     justifyContent: 'flex-end',
@@ -193,10 +352,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#161616',
     paddingTop: 12,
     paddingHorizontal: 12,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    // minHeight: 555,
-    flex: 0.69,
+
+    minHeight: windowHeight - 200,
+    //  flex: 0.69,
     paddingBottom: 20,
   },
   center: {
@@ -209,5 +367,19 @@ const styles = StyleSheet.create({
     height: 5,
     backgroundColor: Color.TEXTDESC,
     borderRadius: 3,
+    alignSelf: 'center',
   },
+
+  channelLogo: {
+    height: 35,
+    width: 35,
+    borderRadius: 50,
+    marginVertical: 10,
+  },
+  channelModalLogo:{
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    marginVertical: 10,
+  }
 });

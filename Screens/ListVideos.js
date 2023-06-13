@@ -70,13 +70,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   text: {
     color: Color.TEXT,
   },
   item: {
     padding: 2,
-    marginVertical: 5,
+    marginBottom: 5,
     height: 260,
   },
   title: {

@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
   container: {
     padding:5,
 width:'100%'    
-
-
   },
   item: {
     padding:4,

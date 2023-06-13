@@ -24,4 +24,20 @@ const converter = value => {
   return formattedDate;
 };
 
-export {converter};
+
+const getDateFormatted = (dateString) => {
+  const date = new Date(dateString);
+  const month = date.toLocaleString('default', { month: 'short' });
+  const day = date.getDate() - 1;
+
+  return `${month} ${day}`;
+};
+
+const getYear = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+
+  return year;
+};
+
+export {converter,getDateFormatted,getYear};
