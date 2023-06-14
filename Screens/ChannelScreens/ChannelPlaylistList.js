@@ -20,12 +20,6 @@ import { PlayListItemList } from './PlaylistItemList';
 import { PlayListVideo } from './PlayListVideo';
 const windowWidth = Dimensions.get('window').width;
 
-const Item = ({item}) => (
-  <View style={styles.item}>
-    <Text style={styles.text}>{item?.snippet?.title}</Text>
-  </View>
-);
-
 export const ChannelPlaylistList = prop => {
   const [playlistItem, setPlaylistItem] = useState();
   // console.log(data);

@@ -40,4 +40,9 @@ const getYear = (dateString) => {
   return year;
 };
 
-export {converter,getDateFormatted,getYear};
+const convertToAtFormat = (inputString) => {
+  const formattedString = `@${inputString.replace(/\s/g, '')}`;
+  return formattedString;
+};
+
+export {converter,getDateFormatted,getYear,convertToAtFormat};

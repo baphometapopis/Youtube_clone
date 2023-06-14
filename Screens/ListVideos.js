@@ -13,6 +13,7 @@ import {converter} from '../function/dateConverter';
 const windowWidth = Dimensions.get('window').width;
 
 export default ListVideos = ({item, navigation}) => {
+  // console.log(item)
   return (
     <TouchableOpacity
       onPress={() => {

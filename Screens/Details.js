@@ -13,7 +13,7 @@ import {Color} from '../Constant';
 import aveta from 'aveta';
 import {converter, getDateFormatted, getYear} from '../function/dateConverter';
 import {useNavigation} from '@react-navigation/native';
-import useFetch, {FetchVideo} from '../Customhooks/useFetch';
+import useFetch, {FetchComments, FetchVideo} from '../Customhooks/useFetch';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -21,26 +21,30 @@ import WebView from 'react-native-webview';
 import Modal from 'react-native-modal';
 import {ScrollView} from 'react-native';
 import {Categories} from '../Components/Categories';
-
+import VideoIcon from 'react-native-vector-icons/Octicons'
 import Close from 'react-native-vector-icons/EvilIcons';
+import ReadMore from '@fawazahmed/react-native-read-more';
+import { Comments } from '../Components/Comments';
+
 
 export const Details = prop => {
-  const [scrollY] = useState(new Animated.Value(0));
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [statistic, setStatistics] = useState(0);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const item=prop.route.params.item
   const navigate = useNavigation();
   const {data} = FetchVideo();
   const {title,description, tags, localized, publishedAt, channelTitle} =
     prop.route.params.item.snippet;
   const {statistics, id} = prop.route.params.item;
-  console.log(description);
+  console.log(prop.route.params.item[0]?.commentCount);
 
   const AnimatedHeaderValue = new Animated.Value(0);
-  const HEADER_MAX_HEIGHT = 150;
+  const HEADER_MAX_HEIGHT = 240;
   const HEADER_MIN_HEIGHT = 40;
 
   const animatedHeaderHeight = AnimatedHeaderValue.interpolate({
@@ -60,6 +64,19 @@ export const Details = prop => {
     extrapolate: 'clamp',
   });
 
+  const GetComments = async () => {
+    try {
+     
+      const {commentsData} =  FetchComments(id);
+      if(commentsData!==undefined)
+      {
+      setComments(commentsData)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
       setStatistics(statistics?.viewCount);
@@ -68,6 +85,7 @@ export const Details = prop => {
       // console.log(prop.route.params.item.irtems[0]?.statistics?.viewCount);
     }
   }, [statistic]);
+
 
   return (
     <View style={styles.container}>
@@ -115,11 +133,10 @@ export const Details = prop => {
               </TouchableOpacity>
               <Text
                 numberOfLines={1}
-                style={{color: 'white', maxWidth: 200, marginHorizontal: 5}}>
+                style={{color: 'white', maxWidth: 180, marginHorizontal: 5}}>
                 {channelTitle}
               </Text>
               <Text style={{color: Color.TEXTDESC}}>
-                {' '}
                 {aveta(prop.route.params.item[0]?.subscriberCount || 2, {
                   digits: 2,
                   lowercase: false,
@@ -131,6 +148,18 @@ export const Details = prop => {
               <Text style={{color: 'black'}}>Subscribe</Text>
             </TouchableOpacity>
           </View>
+          {/* <TouchableOpacity style={{ flexDirection:'row',borderRadius:10,width:windowWidth,backgroundColor:Color.Top_Tab,height:60,margin:1,padding:5}}>
+                <Text style={{color:"white",}}>
+                Comments  
+                </Text>
+                <Text style={{color:Color.TEXTDESC}}> {aveta(item?.statistics?.commentCount   || 2, {
+                  digits: 2,
+                  lowercase: false,
+                })}</Text>
+
+          </TouchableOpacity> */}
+
+          <Comments id={id} count={item?.statistics?.commentCount}/>
         </Animated.View>
         <Animated.View
           style={[{opacity: fadeAnimCategories}, styles.categoryContainer]}>
@@ -165,7 +194,9 @@ export const Details = prop => {
         backdropColor="transparent"
         style={styles.modal}>
         <View style={styles.modalContent}>
+          <ScrollView>
           <View style={styles.barIcon} />
+
           <View
             style={{
               flexDirection: 'row',
@@ -195,21 +226,21 @@ export const Details = prop => {
               marginBottom:15,
             }}>
             <View style={{justifyContent:'center',alignItems:'center'}}>
-              <Text style={{color: 'white'}}> {aveta(statistics?.likeCount, {
+              {/* <Text style={{color: 'white'}}> {aveta(statistics?.likeCount, {
                   digits: 2,
                   lowercase: true,
-                })}</Text>
+                })}</Text> */}
               <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Likes</Text>
             </View>
             <View style={{justifyContent:'center',alignItems:'center'}}>
-              <Text style={{color: 'white'}}>{aveta(statistics?.viewCount, {
+              {/* <Text style={{color: 'white'}}>{aveta(statistics?.viewCount, {
                   digits: 2,
                   lowercase: true,
-                })}</Text>
+                })}</Text> */}
               <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Views</Text>
             </View>
             <View style={{justifyContent:'center',alignItems:'center'}}>
-              <Text style={{color: 'white'}}>{getDateFormatted(prop.route.params.item.snippet.publishedAt)}</Text>
+              <Text style={{color: 'white'}}>{getDateFormatted(prop?.route?.params?.item?.snippet?.publishedAt)}</Text>
               <Text style={{color: Color.TEXTDESC}}>{getYear(prop.route.params.item.snippet.publishedAt)}</Text>
             </View>
           </View>
@@ -223,7 +254,7 @@ export const Details = prop => {
           <View>
             <Text style={{color:'white'}}>{title}</Text>
 
-            <Text numberOfLines={3} style={{color:'white',marginTop:25}}>{description}</Text>
+            <ReadMore numberOfLines={3}  seeLessStyle={{color:'white'}} seeMoreStyle={{color:'white'}} style={{color:'white',marginTop:25}}>{description}</ReadMore>
 
 
           </View>
@@ -268,11 +299,52 @@ export const Details = prop => {
             </View>
            
           </View>
-          <TouchableOpacity
-              style={{backgroundColor: 'white', padding: 5, borderRadius: 25 ,width:100,alignItems:'center'}}>
-              <Text style={{color: 'black'}}>Video</Text>
-            </TouchableOpacity>
+
+{/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
+<View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  gap: 10,
+                }}>
+                  {console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',item?.statistics?.commentCount)}
+                <TouchableOpacity
+                  onPress={() => {
+                    navigate.navigate('ChannelDetail', {item});}}
+
+                  style={{
+                    borderWidth:0.5,borderColor:'grey',
+                    borderRadius: 5,
+                    padding: 5,
+                    flex: 0.5,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap:5
+                  }}>
+                  <VideoIcon name="video" size={26} color="white" />
+
+                  <Text style={{color:"white", margin: 5}}>
+                    Video
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    borderWidth:0.5,borderColor:'grey',
+                    borderRadius: 5,
+                    padding: 5,
+                    flex: 0.5,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap:5
+                  }}>
+                  <Close name="user" size={26} color="white" />
+
+                  <Text style={{color: 'white', margin: 5}}>About</Text>
+                </TouchableOpacity>
+              </View>
+{/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
           </View>
+          </ScrollView>
         </View>
       </Modal>
     </View>
@@ -290,20 +362,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    height: 200,
+    height: 180,
     width: windowWidth,
   },
   descContainer: {
     padding: 10,
     // backgroundColor: 'green',
-    height: 150,
+    height: 300,
   },
   commentContainer: {
-    flex: 0.1,
+    // flex: 0.1,
     // backgroundColor: 'blue',
   },
   contentContainer: {
-    flex: 0.6,
+    // flex: 0.6,
     //  backgroundColor: 'yellow',
   },
   backgroundVideo: {
@@ -353,7 +425,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingHorizontal: 12,
 
-    minHeight: windowHeight - 200,
+    minHeight: windowHeight - 220,
     //  flex: 0.69,
     paddingBottom: 20,
   },

@@ -21,11 +21,13 @@ export const ChannelDetail = props => {
   const [channelResults, setChannelResults] = useState([]);
   const dispatch = useDispatch();
   const data = props.route.params;
-  // console.log(data.item.snippet.channelTitle)
+   console.log(data.item.snippet.channelTitle)
 
   const GetChannelDetails = async () => {
     try {
       dispatch(setChannelId(data.item.snippet.channelId))
+
+
     dispatch(setChannelName(data.item.snippet.channelTitle))
       const {channelData} = await fetchChannel(data.item.snippet.channelId);
       setChannelResults(channelData);

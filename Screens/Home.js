@@ -35,7 +35,7 @@ export const Home = () => {
             () => {
               navigate.navigate('Details');
             }
-            // FetchComments('4ykAepVkG5Y')}
+             FetchComments('4ykAepVkG5Y')}
           }
         />
       </View> */}

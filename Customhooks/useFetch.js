@@ -110,25 +110,53 @@ const fetchChannel = async id => {
   // return null;
 };
 
-const FetchComments = async videoid => {
-  await fetch(
-    Apilinks.COMMENTS_HTTP +
-      new URLSearchParams({
-        key: Apilinks.API_KEY,
-        part: 'snippet,replies',
-        videoId: videoid,
-      }),
-  )
-    .then(res => res.json())
-    .then(data => {
-      data.items.forEach(item => {
-        // getChannelIcon(item);
-        console.log(item.snippet.topLevelComment.snippet);
-        // fetchComments(item.id);
-      });
-    })
-    .catch(err => console.log(err));
+const FetchComments = async (videoid) => {
+  try {
+    const response = await fetch(
+      Apilinks.COMMENTS_HTTP +
+        new URLSearchParams({
+          key: Apilinks.API_KEY,
+          part: 'snippet,replies',
+          videoId: videoid,
+        })
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch comments');
+    }
+
+    const data = await response.json();
+    const comments = data.items
+    // .map((item) => item.snippet.topLevelComment.snippet);
+
+    return comments;
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+
+// const FetchComments = async videoid => {
+//   await fetch(
+//     Apilinks.COMMENTS_HTTP +
+//       new URLSearchParams({
+//         key: Apilinks.API_KEY,
+//         part: 'snippet,replies',
+//         videoId: videoid,
+//       }),
+//   )
+//     .then(res => res.json())
+//     .then(data => {
+//       data.items.forEach(item => {
+//         // getChannelIcon(item);
+//         console.log(item.snippet.topLevelComment.snippet);
+//         // fetchComments(item.id);
+//       });
+//       return {data}
+//     })
+
+//     .catch(err => console.log(err));
+// };
 
 const Search = async params => {
   try {
