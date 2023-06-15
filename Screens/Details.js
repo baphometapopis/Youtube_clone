@@ -21,24 +21,22 @@ import WebView from 'react-native-webview';
 import Modal from 'react-native-modal';
 import {ScrollView} from 'react-native';
 import {Categories} from '../Components/Categories';
-import VideoIcon from 'react-native-vector-icons/Octicons'
+import VideoIcon from 'react-native-vector-icons/Octicons';
 import Close from 'react-native-vector-icons/EvilIcons';
 import ReadMore from '@fawazahmed/react-native-read-more';
-import { Comments } from '../Components/Comments';
-
+import Comments from '../Components/Comments';
 
 export const Details = prop => {
-
   const [isModalVisible, setModalVisible] = useState(false);
   const [statistic, setStatistics] = useState(0);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const item=prop.route.params.item
+  const item = prop.route.params.item;
   const navigate = useNavigation();
   const {data} = FetchVideo();
-  const {title,description, tags, localized, publishedAt, channelTitle} =
+  const {title, description, tags, localized, publishedAt, channelTitle} =
     prop.route.params.item.snippet;
   const {statistics, id} = prop.route.params.item;
   console.log(prop.route.params.item[0]?.commentCount);
@@ -64,18 +62,7 @@ export const Details = prop => {
     extrapolate: 'clamp',
   });
 
-  const GetComments = async () => {
-    try {
-     
-      const {commentsData} =  FetchComments(id);
-      if(commentsData!==undefined)
-      {
-      setComments(commentsData)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
@@ -85,7 +72,6 @@ export const Details = prop => {
       // console.log(prop.route.params.item.irtems[0]?.statistics?.viewCount);
     }
   }, [statistic]);
-
 
   return (
     <View style={styles.container}>
@@ -158,8 +144,8 @@ export const Details = prop => {
                 })}</Text>
 
           </TouchableOpacity> */}
-
-          <Comments id={id} count={item?.statistics?.commentCount}/>
+{console.log('idaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',id)}
+          <Comments id={id} count={item?.statistics?.commentCount} />
         </Animated.View>
         <Animated.View
           style={[{opacity: fadeAnimCategories}, styles.categoryContainer]}>
@@ -195,155 +181,174 @@ export const Details = prop => {
         style={styles.modal}>
         <View style={styles.modalContent}>
           <ScrollView>
-          <View style={styles.barIcon} />
+            <View style={styles.barIcon} />
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginVertical: 5,
-            }}>
-            <Text style={{color: 'white', fontSize: 20}}>Description</Text>
-   
-            <TouchableOpacity onPress={()=>setModalVisible(false)}>
-            <Close  name="close" color="white" size={30} />
-            </TouchableOpacity>
-          
-          </View>
-          <View
-            style={{
-              borderBottomColor: 'grey',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
-          <Text style={{color: 'white', fontSize: 18}}> `{title}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginVertical: 5,
+              }}>
+              <Text style={{color: 'white', fontSize: 20}}>Description</Text>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: 25,
-              marginBottom:15,
-            }}>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-              {/* <Text style={{color: 'white'}}> {aveta(statistics?.likeCount, {
-                  digits: 2,
-                  lowercase: true,
-                })}</Text> */}
-              <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Likes</Text>
-            </View>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-              {/* <Text style={{color: 'white'}}>{aveta(statistics?.viewCount, {
-                  digits: 2,
-                  lowercase: true,
-                })}</Text> */}
-              <Text style={{color: Color.TEXTDESC,textAlign:'center'}}>Views</Text>
-            </View>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-              <Text style={{color: 'white'}}>{getDateFormatted(prop?.route?.params?.item?.snippet?.publishedAt)}</Text>
-              <Text style={{color: Color.TEXTDESC}}>{getYear(prop.route.params.item.snippet.publishedAt)}</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomColor: 'grey',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
-
-          <View>
-            <Text style={{color:'white'}}>{title}</Text>
-
-            <ReadMore numberOfLines={3}  seeLessStyle={{color:'white'}} seeMoreStyle={{color:'white'}} style={{color:'white',marginTop:25}}>{description}</ReadMore>
-
-
-          </View>
-
-          
-          <View
-            style={{
-              borderBottomColor: 'grey',
-              borderBottomWidth: 4,
-            }}
-          />
-          <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity>
-                <Image
-                  source={{
-                    uri: `${prop.route.params.item[0]?.url}`,
-                  }}
-                  style={styles.channelModalLogo}
-                />
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Close name="close" color="white" size={30} />
               </TouchableOpacity>
-              <View style={{margin:10}}>
-              <Text
-                numberOfLines={1}
-                style={{color: 'white', maxWidth: 200}}>
-                {channelTitle}
-              </Text>
-              <Text style={{color: Color.TEXTDESC}}>
-                
-                {aveta(prop.route.params.item[0]?.subscriberCount || 2, {
-                  digits: 2,
-                  lowercase: false,
-                })} Subscriber
-              </Text>
+            </View>
+            <View
+              style={{
+                borderBottomColor: 'grey',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+              }}
+            />
+            <Text style={{color: 'white', fontSize: 18}}> `{title}</Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: 25,
+                marginBottom: 15,
+              }}>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                {statistics?.likeCount && (
+                  <Text style={{color: 'white'}}>
+                    {aveta(statistics?.likeCount, {
+                      digits: 2,
+                      lowercase: true,
+                    })}
+                  </Text>
+                )}
+                <Text style={{color: Color.TEXTDESC, textAlign: 'center'}}>
+                  Likes
+                </Text>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                {statistics?.viewCount && (
+                  <Text style={{color: 'white'}}>
+                    {aveta(statistics?.viewCount, {
+                      digits: 2,
+                      lowercase: true,
+                    })}
+                  </Text>
+                )}
+                <Text style={{color: Color.TEXTDESC, textAlign: 'center'}}>
+                  Views
+                </Text>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: 'white'}}>
+                  {getDateFormatted(
+                    prop?.route?.params?.item?.snippet?.publishedAt,
+                  )}
+                </Text>
+                <Text style={{color: Color.TEXTDESC}}>
+                  {getYear(prop?.route?.params?.item?.snippet?.publishedAt)}
+                </Text>
               </View>
             </View>
-           
-          </View>
+            <View
+              style={{
+                borderBottomColor: 'grey',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+              }}
+            />
 
-{/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
-<View
+            <View>
+              <Text style={{color: 'white'}}>{title}</Text>
+
+              <ReadMore
+                numberOfLines={3}
+                seeLessStyle={{color: 'white'}}
+                seeMoreStyle={{color: 'white'}}
+                style={{color: 'white', marginTop: 25}}>
+                {description}
+              </ReadMore>
+            </View>
+
+            <View
+              style={{
+                borderBottomColor: 'grey',
+                borderBottomWidth: 4,
+              }}
+            />
+            <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TouchableOpacity>
+                   { prop?.route?.params?.item[0]?.url && <Image
+                      source={{
+                        uri: `${prop?.route?.params?.item[0]?.url}`,
+                      }}
+                      style={styles.channelModalLogo}
+                    />}
+                  </TouchableOpacity>
+                  <View style={{margin: 10}}>
+                    <Text
+                      numberOfLines={1}
+                      style={{color: 'white', maxWidth: 200}}>
+                      {channelTitle}
+                    </Text>
+                {  prop.route.params.item[0]?.subscriberCount &&   <Text style={{color: Color.TEXTDESC}}>
+                      {aveta(prop.route.params.item[0]?.subscriberCount, {
+                        digits: 2,
+                        lowercase: false,
+                      })}
+                      Subscriber
+                    </Text>}
+                  </View>
+                </View>
+              </View>
+
+              {/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
+              <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   gap: 10,
                 }}>
-                  {console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',item?.statistics?.commentCount)}
+               
                 <TouchableOpacity
                   onPress={() => {
-                    navigate.navigate('ChannelDetail', {item});}}
-
+                    navigate.navigate('ChannelDetail', {item});
+                  }}
                   style={{
-                    borderWidth:0.5,borderColor:'grey',
+                    borderWidth: 0.5,
+                    borderColor: 'grey',
                     borderRadius: 5,
                     padding: 5,
                     flex: 0.5,
                     justifyContent: 'center',
                     flexDirection: 'row',
-                    gap:5
+                    gap: 5,
                   }}>
                   <VideoIcon name="video" size={26} color="white" />
 
-                  <Text style={{color:"white", margin: 5}}>
-                    Video
-                  </Text>
+                  <Text style={{color: 'white', margin: 5}}>Video</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    borderWidth:0.5,borderColor:'grey',
+                    borderWidth: 0.5,
+                    borderColor: 'grey',
                     borderRadius: 5,
                     padding: 5,
                     flex: 0.5,
                     justifyContent: 'center',
                     flexDirection: 'row',
-                    gap:5
+                    gap: 5,
                   }}>
                   <Close name="user" size={26} color="white" />
 
                   <Text style={{color: 'white', margin: 5}}>About</Text>
                 </TouchableOpacity>
               </View>
-{/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
-          </View>
+              {/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
+            </View>
           </ScrollView>
         </View>
       </Modal>
@@ -448,10 +453,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginVertical: 10,
   },
-  channelModalLogo:{
+  channelModalLogo: {
     height: 50,
     width: 50,
     borderRadius: 50,
     marginVertical: 10,
-  }
+  },
 });
