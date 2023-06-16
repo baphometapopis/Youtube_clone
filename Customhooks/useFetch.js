@@ -3,8 +3,8 @@ import {Apilinks} from '../Constant';
 
 const FetchVideo = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState('');
 
   const fetchVideo = async () => {
     try {
@@ -16,6 +16,7 @@ const FetchVideo = () => {
             chart: 'mostPopular',
             maxResults: Apilinks.MAX_RESULT,
             regionCode: 'IN',
+            videoId: null,
           }),
       ).then(res => res.json());
       // setData(res.items);
@@ -25,18 +26,6 @@ const FetchVideo = () => {
         const {channelInfo} = await fetchChannel(data.snippet.channelId);
         DataVideoWithID.push({...data, ...channelInfo});
       }
-
-      // res.items.forEach(async element => {
-
-      //     const channel = await fetchChannel(element.snippet.channelId);
-      //     // console.log(channel,element);
-      //     DataVideoWithID.push({...element,...channel})
-      //     // setData({
-      //     //   data:res.items,
-      //     //   channelId:channel
-      //     // })
-
-      // });
       setData(DataVideoWithID);
     } catch (err) {
       console.log(err);
@@ -89,20 +78,20 @@ const fetchChannel = async id => {
       Apilinks.CHANNEL_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
-          part: "brandingSettings,snippet,topicDetails,id,statistics",
+          part: 'brandingSettings,snippet,topicDetails,id,statistics',
           id: id,
         }),
     ).then(res => res.json());
-    const channelData=res.items;
-    const channelInfo=[]
+    const channelData = res.items;
+    const channelInfo = [];
 
     if (res.items.length > 0) {
-      const customUrl=res.items[0].snippet.customUrl
-      const subscriberCount=(res.items[0]?.statistics?.subscriberCount)
+      const customUrl = res.items[0].snippet.customUrl;
+      const subscriberCount = res.items[0]?.statistics?.subscriberCount;
       const channelImage = res.items[0]?.snippet?.thumbnails?.high;
-      channelInfo.push({...channelImage,customUrl,subscriberCount,});
+      channelInfo.push({...channelImage, customUrl, subscriberCount});
 
-      return {channelInfo,channelData};
+      return {channelInfo, channelData};
     }
   } catch (err) {
     console.log(err);
@@ -110,7 +99,7 @@ const fetchChannel = async id => {
   // return null;
 };
 
-const FetchComments = async (videoid) => {
+const FetchComments = async videoid => {
   try {
     const response = await fetch(
       Apilinks.COMMENTS_HTTP +
@@ -118,7 +107,7 @@ const FetchComments = async (videoid) => {
           key: Apilinks.API_KEY,
           part: 'snippet,replies',
           videoId: videoid,
-        })
+        }),
     );
 
     if (!response.ok) {
@@ -126,7 +115,7 @@ const FetchComments = async (videoid) => {
     }
 
     const data = await response.json();
-    const comments = data.items
+    const comments = data.items;
     // .map((item) => item.snippet.topLevelComment.snippet);
 
     return comments;
@@ -134,7 +123,6 @@ const FetchComments = async (videoid) => {
     console.log(error);
   }
 };
-
 
 // const FetchComments = async videoid => {
 //   await fetch(
@@ -174,13 +162,11 @@ const Search = async params => {
         const DataVideoWithID = [];
         // console.log(res)
         for (const data of res.items) {
-
           const videoId = await fetchVideoByID(data.id.videoId);
           const {channelInfo} = await fetchChannel(data.snippet.channelId);
           // console.log('>>>>>>>>>>>>>', channelInfo);
 
-
-          DataVideoWithID.push({...data,...videoId,...channelInfo});
+          DataVideoWithID.push({...data, ...videoId, ...channelInfo});
         }
         // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
         return DataVideoWithID;
@@ -192,24 +178,63 @@ const Search = async params => {
   }
 };
 
-const fetchVideoByID = async (id) => {
+const SearchCategories = async params => {
+  try {
+    const res = await fetch(
+      Apilinks.SEARCH_HTTP +
+        new URLSearchParams({
+          key: Apilinks.API_KEY,
+          part: 'snippet',
+          maxResults: Apilinks.MAX_RESULT,
+          type: 'video',
+          videoCategoryId: 42,
+        }),
+    )
+      .then(res => res.json())
+      .then(async res => {
+        const DataVideoWithID = [];
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', res);
+        for (const data of res.items) {
+          console.log(data);
+
+          const videoId = await fetchVideoByID(data.id.videoId);
+          const {channelInfo} = await fetchChannel(data.snippet.channelId);
+          // console.log('>>>>>>>>>>>>>', channelInfo);
+
+          DataVideoWithID.push({...data, ...videoId, ...channelInfo});
+        }
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",DataVideoWithID)
+        return DataVideoWithID;
+      });
+
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const fetchVideoByID = async id => {
   try {
     const res = await fetch(
       Apilinks.VIDEO_HTTP +
         new URLSearchParams({
           key: Apilinks.API_KEY,
           part: 'contentDetails,statistics',
-          id:id
+          id: id,
         }),
     ).then(res => res.json());
 
- 
-        
-
-    return res
+    return res;
   } catch (err) {
     console.log(err);
   }
 };
 
-export {FetchVideo, FetchCategories, fetchChannel, FetchComments, Search};
+export {
+  FetchVideo,
+  FetchCategories,
+  fetchChannel,
+  FetchComments,
+  Search,
+  SearchCategories,
+};

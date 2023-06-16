@@ -17,8 +17,7 @@ import {Color} from '../../Constant';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const CommentModal = ({isModalVisible, toggleModal, comments, Replies}) => {
-  console.log(comments);
+const CommentModal = ({isModalVisible, toggleModal, comments}) => {
   return (
     <Modal
       onBackdropPress={toggleModal}

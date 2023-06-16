@@ -1,47 +1,39 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,  
-  FlatList,
-  Dimensions,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, FlatList, Dimensions} from 'react-native';
 import {Color} from '../Constant';
-import useFetch, { FetchVideo } from '../Customhooks/useFetch';
+import {FetchVideo} from '../Customhooks/useFetch';
 import {useNavigation} from '@react-navigation/native';
 import ListVideos from './ListVideos';
-import { Header } from '../Components/Header';
-import { Categories } from '../Components/Categories';
+import {Header} from '../Components/Header';
+import {Categories} from '../Components/Categories';
+import {useSelector} from 'react-redux';
 const windowWidth = Dimensions.get('window').width;
 
+const Home = () => {
+  // const [category, setCategoryId] = useState(0);
+  const {categoryId} = useSelector(state => state.category);
+  console.log(categoryId);
 
-export const Home = () => {
   const navigate = useNavigation();
   const {data} = FetchVideo();
   return (
     <SafeAreaView style={styles.container}>
-    <Header/>
-    <Categories/>
+      <Header />
+
+      <Categories />
+
       <FlatList
         data={data}
-        renderItem={({item}) => <ListVideos item={item} navigation={navigate} />}
+        renderItem={({item}) => (
+          <ListVideos item={item} navigation={navigate} />
+        )}
         keyExtractor={item => item.id}
       />
-
-      {/* <View>
-        <Text style={styles.text}>bjdbs</Text>
-        <Button
-          title="click me"
-          onPress={
-            () => {
-              navigate.navigate('Details');
-            }
-             FetchComments('4ykAepVkG5Y')}
-          }
-        />
-      </View> */}
     </SafeAreaView>
   );
 };
+
+export {Home};
 
 const styles = StyleSheet.create({
   container: {

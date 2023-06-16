@@ -1,10 +1,24 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View,SafeAreaView} from 'react-native';
+import { Header } from '../Components/Header';
 
 export const Subscription = () => {
   return (
-    <View>
-      <Text style={{Color: 'black'}}>this is Subscription page</Text>
-    </View>
+    <SafeAreaView style={style.Container}>
+          <Header/>
+
+      <Text style={style.text}>this is Subscription page</Text> 
+    </SafeAreaView>
   );
 };
+
+const style=StyleSheet.create({
+  Container:{
+    flex:1,
+    backgroundColor:'black'
+  },
+  text:{
+    color:'white'
+  }
+
+})

@@ -3,7 +3,8 @@ import {createSlice} from '@reduxjs/toolkit';
     name: 'channel',
     initialState: {
       channelId: 'sdsdsdsds',
-      channelName:'name'
+      channelName:'name',
+      
     },
     reducers: {
       setChannelId: (state, action) => {

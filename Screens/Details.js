@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,7 +13,7 @@ import {Color} from '../Constant';
 import aveta from 'aveta';
 import {converter, getDateFormatted, getYear} from '../function/dateConverter';
 import {useNavigation} from '@react-navigation/native';
-import useFetch, {FetchComments, FetchVideo} from '../Customhooks/useFetch';
+import {FetchVideo} from '../Customhooks/useFetch';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -25,15 +25,20 @@ import VideoIcon from 'react-native-vector-icons/Octicons';
 import Close from 'react-native-vector-icons/EvilIcons';
 import ReadMore from '@fawazahmed/react-native-read-more';
 import Comments from '../Components/Comments';
+import {subscribe} from '../function/SubscribeHandle';
+import ListVideos from './ListVideos';
 
 export const Details = prop => {
+  const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [statistic, setStatistics] = useState(0);
+  const channelId = item?.snippet?.channelId;
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   const item = prop.route.params.item;
+  // console.log(item)
   const navigate = useNavigation();
   const {data} = FetchVideo();
   const {title, description, tags, localized, publishedAt, channelTitle} =
@@ -62,8 +67,6 @@ export const Details = prop => {
     extrapolate: 'clamp',
   });
 
-
-
   useEffect(() => {
     if (prop.route.params.item.kind == 'youtube#video') {
       setStatistics(statistics?.viewCount);
@@ -71,7 +74,12 @@ export const Details = prop => {
       setStatistics(prop.route.params.item.items[0]?.statistics?.viewCount);
       // console.log(prop.route.params.item.irtems[0]?.statistics?.viewCount);
     }
-  }, [statistic]);
+  }, [
+    prop.route.params.item.items,
+    prop.route.params.item.kind,
+    statistic,
+    statistics?.viewCount,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -109,7 +117,10 @@ export const Details = prop => {
               justifyContent: 'space-between',
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ChannelDetail', {item});
+                }}>
                 <Image
                   source={{
                     uri: `${prop.route.params.item[0]?.url}`,
@@ -123,28 +134,25 @@ export const Details = prop => {
                 {channelTitle}
               </Text>
               <Text style={{color: Color.TEXTDESC}}>
-                {aveta(prop.route.params.item[0]?.subscriberCount || 2, {
+                {aveta(prop?.route?.params?.item[0]?.subscriberCount || 2, {
                   digits: 2,
                   lowercase: false,
                 })}
               </Text>
             </View>
+
+            {/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa      */}
+
             <TouchableOpacity
+              onPress={() => subscribe(item?.snippet?.channelId, id)}
               style={{backgroundColor: 'white', padding: 5, borderRadius: 25}}>
               <Text style={{color: 'black'}}>Subscribe</Text>
             </TouchableOpacity>
-          </View>
-          {/* <TouchableOpacity style={{ flexDirection:'row',borderRadius:10,width:windowWidth,backgroundColor:Color.Top_Tab,height:60,margin:1,padding:5}}>
-                <Text style={{color:"white",}}>
-                Comments  
-                </Text>
-                <Text style={{color:Color.TEXTDESC}}> {aveta(item?.statistics?.commentCount   || 2, {
-                  digits: 2,
-                  lowercase: false,
-                })}</Text>
 
-          </TouchableOpacity> */}
-{console.log('idaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',id)}
+            {/* aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
+          </View>
+
+          {console.log('idaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', id)}
           <Comments id={id} count={item?.statistics?.commentCount} />
         </Animated.View>
         <Animated.View
@@ -281,12 +289,14 @@ export const Details = prop => {
                 }}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <TouchableOpacity>
-                   { prop?.route?.params?.item[0]?.url && <Image
-                      source={{
-                        uri: `${prop?.route?.params?.item[0]?.url}`,
-                      }}
-                      style={styles.channelModalLogo}
-                    />}
+                    {prop?.route?.params?.item[0]?.url && (
+                      <Image
+                        source={{
+                          uri: `${prop?.route?.params?.item[0]?.url}`,
+                        }}
+                        style={styles.channelModalLogo}
+                      />
+                    )}
                   </TouchableOpacity>
                   <View style={{margin: 10}}>
                     <Text
@@ -294,13 +304,15 @@ export const Details = prop => {
                       style={{color: 'white', maxWidth: 200}}>
                       {channelTitle}
                     </Text>
-                {  prop.route.params.item[0]?.subscriberCount &&   <Text style={{color: Color.TEXTDESC}}>
-                      {aveta(prop.route.params.item[0]?.subscriberCount, {
-                        digits: 2,
-                        lowercase: false,
-                      })}
-                      Subscriber
-                    </Text>}
+                    {prop.route.params.item[0]?.subscriberCount && (
+                      <Text style={{color: Color.TEXTDESC}}>
+                        {aveta(prop.route.params.item[0]?.subscriberCount, {
+                          digits: 2,
+                          lowercase: false,
+                        })}
+                        Subscriber
+                      </Text>
+                    )}
                   </View>
                 </View>
               </View>
@@ -312,7 +324,6 @@ export const Details = prop => {
                   justifyContent: 'space-between',
                   gap: 10,
                 }}>
-               
                 <TouchableOpacity
                   onPress={() => {
                     navigate.navigate('ChannelDetail', {item});
